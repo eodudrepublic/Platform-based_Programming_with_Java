@@ -1,3 +1,6 @@
+package mid_term;
+// 제외
+
 import java.util.Scanner;
 final class Problem3 {
     private Triangle triangle;

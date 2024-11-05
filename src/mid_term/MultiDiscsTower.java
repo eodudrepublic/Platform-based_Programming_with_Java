@@ -1,3 +1,4 @@
+package mid_term;
 import static java.lang.Math.abs;
 
 public class MultiDiscsTower implements Tower {

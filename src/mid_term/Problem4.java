@@ -1,5 +1,7 @@
+package mid_term;
 import java.util.ArrayList;
 import java.util.List;
+
 public class Problem4 {
     public static void main(String[] args) {
         List<Customer> customers = new ArrayList<>();

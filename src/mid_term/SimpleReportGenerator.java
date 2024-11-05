@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+package mid_term;
+// 제외
 import java.util.List;
 
 public class SimpleReportGenerator extends AbstractReportGenerator {

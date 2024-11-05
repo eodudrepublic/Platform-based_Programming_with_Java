@@ -1,4 +1,8 @@
+package mid_term;
+// 제외
+
 import java.util.Scanner;
+
 class Problem2 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

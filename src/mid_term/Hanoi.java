@@ -1,3 +1,5 @@
+package mid_term;
+
 public class Hanoi {
     private final int n;
     private final int from;

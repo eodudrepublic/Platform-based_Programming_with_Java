@@ -1,3 +1,6 @@
+package mid_term;
+// 제외
+
 class OneStarTriangle implements Triangle {
     private int row;
     private int col;
