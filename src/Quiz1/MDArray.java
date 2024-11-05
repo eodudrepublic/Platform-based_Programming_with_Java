@@ -1,4 +1,4 @@
-package Sep12th;
+package Quiz1;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package Sep12th;
+package Quiz1;
 import java.util.Scanner;
 
 // 퀴즈 1-1 : 별찍기
