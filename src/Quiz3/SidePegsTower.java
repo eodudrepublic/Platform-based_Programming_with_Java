@@ -3,28 +3,32 @@ package Quiz3;
 import java.util.ArrayList;
 import java.util.List;
 
+interface Tower {
+    int move();
+}
+
 public class SidePegsTower implements Tower {
-    List<Tower> towers = new ArrayList<>();
+    private List<Tower> towers = new ArrayList<>();
     private int numOfDisks;
 
     public SidePegsTower(int numOfDisks) {
         this.numOfDisks = numOfDisks;
 
         if (numOfDisks <= 0) {
-            // 이동할 디스크가 없습니다.
+            // 이동할 디스크가 없음
         } else if (numOfDisks == 1) {
-            // 기저 사례: A와 C에서 B로 디스크를 이동
+            // 기저 사례: 양쪽의 디스크를 중앙으로 이동
             towers.add(new SingleDiscTower("A", "B"));
             towers.add(new SingleDiscTower("C", "B"));
         } else {
-            // 객체 분해 구조에 따라 타워 구성
-            towers.add(new SidePegsTower(numOfDisks - 2));
-            towers.add(new SingleDiscTower("C", "A"));
-            towers.add(new MultiDiscsTower(numOfDisks - 2, "B", "C", "A"));
-            towers.add(new SingleDiscTower("C", "B"));
-            towers.add(new MultiDiscsTower(numOfDisks - 1, "A", "B", "C"));
-            towers.add(new SingleDiscTower("A", "B"));
-            towers.add(new MultiDiscsTower(numOfDisks - 1, "C", "A", "B"));
+            // Image 4의 분해도에 따른 7단계 이동
+            towers.add(new SidePegsTower(numOfDisks - 2));           // n-2개 디스크 처리
+            towers.add(new SingleDiscTower("C", "A"));               // 한 개를 C에서 A로
+            towers.add(new MultiDiscsTower(numOfDisks - 2, "B", "C", true));  // n-2개를 B에서 C로
+            towers.add(new SingleDiscTower("C", "B"));               // 한 개를 C에서 B로
+            towers.add(new MultiDiscsTower(numOfDisks - 1, "A", "B", false)); // n-1개를 A에서 B로
+            towers.add(new SingleDiscTower("A", "B"));               // 한 개를 A에서 B로
+            towers.add(new MultiDiscsTower(numOfDisks - 1, "C", "B", false)); // n-1개를 C에서 B로
         }
     }
 
@@ -38,10 +42,6 @@ public class SidePegsTower implements Tower {
     }
 }
 
-interface Tower {
-    int move();
-}
-
 class SingleDiscTower implements Tower {
     private String from;
     private String to;
@@ -53,7 +53,6 @@ class SingleDiscTower implements Tower {
 
     @Override
     public int move() {
-        // 한 개의 디스크를 이동하는 데는 1번의 이동이 필요합니다.
         return 1;
     }
 }
@@ -62,28 +61,26 @@ class MultiDiscsTower implements Tower {
     private int numOfDisks;
     private String from;
     private String to;
-    private String aux;
+    private boolean isIntermediate; // 중간 이동인지 최종 이동인지 구분
 
-    public MultiDiscsTower(int numOfDisks, String from, String to, String aux) {
+    public MultiDiscsTower(int numOfDisks, String from, String to, boolean isIntermediate) {
         this.numOfDisks = numOfDisks;
         this.from = from;
         this.to = to;
-        this.aux = aux;
+        this.isIntermediate = isIntermediate;
     }
 
     @Override
     public int move() {
-        if (numOfDisks <= 0) {
-            return 0;
-        } else if (numOfDisks == 1) {
-            // 한 개의 디스크를 이동하는 경우
-            return 1;
+        if (numOfDisks <= 0) return 0;
+        if (numOfDisks == 1) return 1;
+
+        if (isIntermediate) {
+            // 중간 이동(B에서 C로)의 경우
+            return (1 << (numOfDisks - 1)); // 2^(n-1)
         } else {
-            // 재귀적으로 이동 횟수 계산
-            MultiDiscsTower firstPart = new MultiDiscsTower(numOfDisks - 1, from, aux, to);
-            SingleDiscTower moveLargestDisk = new SingleDiscTower(from, to);
-            MultiDiscsTower secondPart = new MultiDiscsTower(numOfDisks - 1, aux, to, from);
-            return firstPart.move() + moveLargestDisk.move() + secondPart.move();
+            // 최종 이동(A에서 B로 또는 C에서 B로)의 경우
+            return (1 << numOfDisks) - 1; // 2^n - 1
         }
     }
 }
